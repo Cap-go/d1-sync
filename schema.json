@@ -82,7 +82,10 @@
       "retention": "INTEGER",
       "owner_org": "TEXT",
       "default_upload_channel": "TEXT",
-      "transfer_history": "JSON"
+      "transfer_history": "JSON",
+      "default_channel_ios": "INTEGER",
+      "default_channel_android": "INTEGER",
+      "default_channel_sync": "BOOLEAN"
     },
     "indexes": [
       "app_id",

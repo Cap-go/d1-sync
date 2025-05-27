@@ -39,6 +39,28 @@ A trigger function in your source Postgres database writes change events (INSERT
             FOR EACH ROW EXECUTE FUNCTION trigger_http_queue_post_to_function_d1();
         ```
 
+## Replicating existing tables
+
+```sql
+WITH payloads AS (
+  SELECT jsonb_build_object(
+    'record', to_jsonb(av.*),
+    'old_record', '{}',
+    'type', 'INSERT',
+    'table', 'manifest' -- <---------- PUT TABLE NAME HERE
+  ) AS msg
+  FROM manifest av -- <--------------- PUT TABLE NAME HERE
+),
+batched AS (
+  SELECT array_agg(msg) AS msgs FROM payloads
+)
+SELECT COUNT(*) AS messages_sent
+FROM pgmq.send_batch(
+  queue_name => 'replicate_data',
+  msgs       => (SELECT msgs FROM batched)
+);
+```
+
 ## Schema Configuration (`schema.json`)
 
 **IMPORTANT:** The file `schema.json` is the **single source of truth** for defining which tables and columns are replicated to D1, how their types are mapped, and which indexes are created.

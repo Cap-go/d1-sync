@@ -22,5 +22,8 @@
       "database_name": "capgo_prod_replicate",
       "database_id": "7f267d86-f4f7-49f5-9622-e44373aa00dc"
     }
-  ]
+  ],
+  "vars": {
+    "WEBHOOK_SECRET": "your_strong_webhook_secret"
+  }
 } 
